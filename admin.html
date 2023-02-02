@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+    <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+    <title>Admin - Page</title>
+</head>
+<script src="static/js/admin.js"></script>
+<script>
+    checkIfAdmin;
+    get_data();
+</script>
+
+<body>
+    <div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                    role="tab" aria-controls="home" aria-selected="true">Inscrições
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#user" type="button"
+                    role="tab" aria-controls="user" aria-selected="false">Usuários
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+                    role="tab" aria-controls="profile" aria-selected="false">Notícias
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="container">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <!-- Button trigger modal -->
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Inscrever Usuário
+                    </button>
+                    <form class="d-flex" action="/user/admin/{{search}}" method="post">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Criar um novo usuário</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/user/admin/create" method="post">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Senha</label>
+                                        <input type="password" class="form-control" id="password" name="password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirm_password" class="form-label">Confirmação de senha</label>
+                                        <input type="password" class="form-control" id="confirm_password"
+                                            name="confirm_password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Função</label>
+                                        <select class="form-select" aria-label="Default select example" id="role"
+                                            name="role">
+                                            <option value="admin">Administrador</option>
+                                            <option value="user">Usuário</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Fechar
+                                        </button>
+                                        <input type="submit" value="Save" class="btn btn-primary">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Minicurso</th>
+                            <th scope="col">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+                <!-- Button trigger modal -->
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Adicionar Usuário
+                    </button>
+                    <form class="d-flex" action="/user/admin/{{search}}" method="post">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Criar um novo usuário</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/user/admin/create" method="post">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Senha</label>
+                                        <input type="password" class="form-control" id="password" name="password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirm_password" class="form-label">Confirmação de senha</label>
+                                        <input type="password" class="form-control" id="confirm_password"
+                                            name="confirm_password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Função</label>
+                                        <select class="form-select" aria-label="Default select example" id="role"
+                                            name="role">
+                                            <option value="admin">Administrador</option>
+                                            <option value="user">Usuário</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Fechar
+                                        </button>
+                                        <input type="submit" value="Save" class="btn btn-primary">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Cargo</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <!-- Button trigger modal -->
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNoticia">
+                        Adicionar Notícia
+                    </button>
+                    <form class="d-flex" action="/user/admin/{{search}}" method="post">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="modalNoticia" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Criar uma nova noticia</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="loginform">
+                                    <div id='add-post' class="container pt-4 pb-5">
+                                        <form method="post" action="{{ url_for('add_news') }}">
+                                            <div class="text-center pt-3">
+                                                <p class="display-7 fw-bold">Adicionar Notícia</p><span><small
+                                                        class="textinho">Insira o conteúdo da notícia</small></span>
+                                            </div>
+                                            <div class="row px-md-4 px-1 m-0">
+                                                <div class="col-12">
+                                                    <div>
+                                                        <p class="pb-1 username"></p> <input type="text"
+                                                            class=" name form-control mb-4" placeholder="Título"
+                                                            name="title" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12"><input type="text" class="form-control mb-4"
+                                                        name="resume" placeholder="Resumo" required></div>
+                                                <div class="col-12">
+                                                    <textarea class="form-control mb-4" name="content" rows="5"
+                                                        placeholder="Conteúdo" id="markdown-textarea"
+                                                        required></textarea>
+                                                    <label for="markdown-textarea">Prévia:</label>
+                                                    <div id="preview"></div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control mb-4" name="img_url"
+                                                        placeholder="Link da Imagem" required>
+                                                </div>
+                                                <div class="col-12"><input type="text" class="form-control mb-4"
+                                                        name="author" placeholder="Autor" required></div>
+                                                <div class="col-12"
+                                                    style="display: flex; justify-content: center; padding-top: 10px;">
+                                                    <input type="submit" id="buttonsubmit" value="Submit"
+                                                        class="btn btn-primary py-3"
+                                                        style="width: 50%;background-color:#262626; border-color: white;">
+                                                </div>
+                                            </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Autor</th>
+                            <th scope="col">Resumo</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="news-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+    integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+<script>
+    var converter = new showdown.Converter();
+    var textarea_new = document.getElementById("markdown-textarea");
+    var preview_new = document.getElementById("preview");
+
+    textarea_new.addEventListener("input", function () {
+        var markdown_new = textarea_new.value;
+        var html_new = converter.makeHtml(markdown_new);
+        preview_new.innerHTML = html_new;
+    });
+</script>
+
+</body>
+
+</html>
