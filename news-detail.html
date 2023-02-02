@@ -6,74 +6,54 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/news-detail.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="static/js/news-detail.js"></script>
 </head>
+<script>
+    newsDetail()
+</script>
 <body>
-<nav id='navbar' class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/index">
-                    <img src="static/assets/gepac%20logo%20branco%202.png" alt="Avatar Logo" style="width:60px;"
-                         class="rounded-pill">
-                </a>
+    <nav id='navbar' class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="index">
+                        <img src="../static/assets/gepac%20logo%20branco%202.png" alt="Avatar Logo" style="width:60px;"
+                             class="rounded-pill">
+                    </a>
+                </div>
+            </nav>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" aria-current="page" href="index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 active" href="news">Notícias</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Eventos
+                        </a>    
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="semanadafisica">II Semana da Física</a></li>
+                            <li><a class="dropdown-item" href="#">VI From Micro</a></li>
+                            <li><a class="dropdown-item" href="#">Moon Night</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-        </nav>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ms-auto ">
-                <li class="nav-item">
-                    <a class="nav-link mx-2" aria-current="page" href="/gepac-website-frontend/static">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2 active" href="/news">Notícias</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Eventos
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="/semanadafisica">II Semana da Física</a></li>
-                        <li><a class="dropdown-item" href="#">VI From Micro</a></li>
-                        <li><a class="dropdown-item" href="#">Moon Night</a></li>
-                    </ul>
-                </li>
-                                {% if session['logged_in'] %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ session['name'] }}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                        {% if session['admin'] %}
-                        <li><a class="dropdown-item" href="/user/admin">Admin</a></li>
-                        {% endif %}
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                    </ul>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="login">Login</a>
-                </li>
-                {% endif %}
-            </ul>
         </div>
-    </div>
-</nav>
-<article class="container">
-    <h1>{{ news.title }}</h1>
-    <p>{{ news.resume }}</p>
-    <div>
-        <img src="{{ news.img_url }}" alt="Imagem da notícia">
-    </div>
-    <p>{{ news.content|safe }}</p>
+    </nav>
+<article class="container" id="news-table" style="margin-top:2%">
 </article>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static/js/navbar.js"></script>
 </body>
 </html>
