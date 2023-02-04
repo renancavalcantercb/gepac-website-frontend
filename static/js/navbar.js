@@ -38,7 +38,7 @@ function logout() {
         method: 'POST'
     };
 
-    fetch('http://127.0.0.1:5000/logout', options)
+    fetch('https://gepac-backend.herokuapp.com//logout', options)
         .then(
             response => response.json(),
             window.location.href = '/'
