@@ -6,9 +6,19 @@ body {
     background-image: url(../assets/bg.jpg);
 }
 
-@media (max-width: 767px) {
-    body {
-        font-size: 4vw;
+article {
+    font-size: 2vw;
+}
+
+@media only screen and (max-width: 50vw) {
+    article {
+        font-size: 1.5vw;
+    }
+}
+
+@media only screen and (max-height: 30vh) {
+    article {
+        font-size: 1vw;
     }
 }
 
