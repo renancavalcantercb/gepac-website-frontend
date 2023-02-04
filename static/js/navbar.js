@@ -6,7 +6,7 @@ function parseJWT(token) {
 
 const jwt = localStorage.getItem('token')
 if (jwt == null){
-    const active = window.location.pathname === '/login.html' ? 'active' : '';
+    const active = window.location.pathname === '/login' ? 'active' : '';
     $('.navbar-nav.ms-auto').append(`
     <li class="nav-item">
         <a class="nav-link mx-2 ${active}" href="login">Login</a>
@@ -16,7 +16,7 @@ if (jwt == null){
 
 else {
     const user = parseJWT(jwt);
-    admin_page = (user.admin == true) ? '<li><a class="dropdown-item" href="/user/admin">Admin</a></li>' : '';
+    admin_page = (user.admin == true) ? '<li><a class="dropdown-item" href="/admin">Admin</a></li>' : '';
     $('.navbar-nav.ms-auto').append(`
             <li class="nav-item dropdown">
                 <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"

@@ -13,7 +13,7 @@ function newsDetail() {
                 <h1>${news.title}</h1> 
                 <p>${news.resume}</p> 
                 <div class="d-flex justify-content-center"> 
-                <img src="${news.img_url}" alt="Imagem da notícia"> 
+                <img class="img-fluid" src="${news.img_url}" alt="Imagem da notícia"> 
                 </div> 
                 <p style="margin-top:2%">${news.content}</p>`
             )

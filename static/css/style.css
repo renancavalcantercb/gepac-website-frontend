@@ -4,8 +4,9 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url(../assets/bg.jpg);
+    height: 100%;
 }
 
 body.no-scroll {
     overflow-x: hidden;
-  }
+}
