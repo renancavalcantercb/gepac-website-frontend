@@ -3,7 +3,7 @@ function newsDetail() {
     let slug = urlParams.get("slug");
     $.ajax({
         type: "GET",
-        url: "https://gepac-backend.herokuapp.com//news/" + slug,
+        url: "https://gepac-backend.herokuapp.com/news/" + slug,
         dataType: "json",
         success: function (data) {
             let news = data;

@@ -38,7 +38,7 @@ function handleFormSubmit(event) {
         body: data
     };
 
-    fetch('https://gepac-backend.herokuapp.com//register', options)
+    fetch('https://gepac-backend.herokuapp.com/register', options)
         .then(response => {
             if (response.status !== 200) {
                 return response.json().then(data => {

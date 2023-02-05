@@ -21,7 +21,7 @@ if (!checkIfAdmin()) {
 }
 
 function get_data() {
-    $.getJSON("https://gepac-backend.herokuapp.com//user/admin", function (data) {
+    $.getJSON("https://gepac-backend.herokuapp.com/user/admin", function (data) {
         students_data(data);
         users_data(data);
         news_data(data);
@@ -42,11 +42,11 @@ function students_data(data) {
 <td>${student.course}</td>
 <td>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#edit_{{student['_id']}}">
+                            data-bs-target="#edit_${student._id.$oid}">
                             Editar
                         </button>
                         <!-- The Modal -->
-                        <div class="modal" id="edit_{{student['_id']}}">
+                        <div class="modal" id="edit_${student._id.$oid}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <!-- Modal Header -->
@@ -58,39 +58,40 @@ function students_data(data) {
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
-                                        <form action="/user/admin/{{student['_id']}}/edit" method="post">
+                                        <form id="edit_${student._id.$oid}" onsubmit="handleFormSubscribed(event,'${student._id.$oid}')">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Name:</label>
                                                 <input type="text" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp" name="name"
-                                                    value="{{student['name']}}">
+                                                    value="${student['name']}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1"
                                                     class="form-label">Email:</label>
                                                 <input type="email" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp" name="email"
-                                                    value="{{student['email']}}">
+                                                    value="${student['email']}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Data de
                                                     Nascimento:</label>
                                                 <input type="date" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp" name="birthdate"
-                                                    value="{{student['birthdate']}}">
+                                                    value="${student['birthdate']}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1"
                                                     class="form-label">Telefone:</label>
                                                 <input type="tel" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp" name="phone"
-                                                    value="{{student['phone']}}">
+                                                    value="${student['phone']}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1"
                                                     class="form-label">Minicurso:</label>
                                                 <select class="form-control mb-4" name="course" id="pass"
                                                     required>
+                                                    <option value="0">Nenhum</option>
                                                     <option value="1">Selenografia - Prof. Heliomarzio</option>
                                                     <option value="2">Física Estatística - Prof. Mairton
                                                         Cavalcante
@@ -108,7 +109,7 @@ function students_data(data) {
                                                     data-bs-dismiss="modal">
                                                     Fechar
                                                 </button>
-                                                <form action="/user/admin/{{student['_id']}}/edit"
+                                                <form id="subscribed-edit" action="https://gepac-backend.herokuapp.com/subscribed/admin/${student._id.$oid}/edit"
                                                     method="post">
                                                     <input type="submit" value="Editar" class="btn btn-danger">
                                                 </form>
@@ -120,11 +121,11 @@ function students_data(data) {
                         </div>
                         <!-- Button to Open the Modal -->
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#del_{{student['_id']}}">
+                            data-bs-target="#del_${student['_id']}">
                             Deletar
                         </button>
                         <!-- The Modal -->
-                        <div class="modal" id="del_{{student['_id']}}">
+                        <div class="modal" id="del_${student._id.$oid}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <!-- Modal Header -->
@@ -144,7 +145,7 @@ function students_data(data) {
                                         <button type="button" class="btn btn-success"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <a href="/user/admin/{{ student['_id'] }}/delete"
+                                        <a href="/user/admin/${student._id.$oid}/delete"
                                             class="btn btn-danger">Deletar</a>
                                     </div>
 
@@ -156,6 +157,38 @@ function students_data(data) {
 `);
     }
 };
+
+function handleFormSubscribed(event, id) {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const options = {
+        method: 'POST',
+        body: data
+    };
+
+    fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/edit', options)
+        .then(response => {
+            console.log(response);
+            if (response.status !== 200) {
+                return response.json().then(data => {
+                    throw new Error(data);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const [{category, message}, statusCode] = data;
+            if (statusCode === 200) {
+                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+            }
+            const errorMessage = `${message}`;
+            document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+        })
+        .catch(error => {
+            document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+        });
+}
 
 function users_data(data) {
     let users = data.users;
@@ -182,10 +215,10 @@ function users_data(data) {
                             <button type="button" class="btn btn-primary"
                                 data-bs-dismiss="modal">X</button>
                         </div>
-
+                        <div id="result"></div>
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <form action="/user/admin/{{user['_id']}}/edit" method="post">
+                            <form action="https://gepac-backend.herokuapp.com/user/admin/${user._id.$oid}/edit" method="post">
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1"
                                         class="form-label">Email:</label>
@@ -208,7 +241,7 @@ function users_data(data) {
                                         data-bs-dismiss="modal">
                                         Fechar
                                     </button>
-                                    <form action="/user/admin/{{user['_id']}}/edit" method="post">
+                                    <form action="https://gepac-backend.herokuapp.com/user/admin/${user._id.$oid}/edit" method="post">
                                         <input type="submit" value="Editar" class="btn btn-danger">
                                     </form>
                                 </div>
@@ -288,7 +321,7 @@ function news_data(data) {
                                                 </div>
                                                 <!-- Modal body -->
                                                 <div class="modal-body">
-                                                    <form method="post" action="/news/{{post['_id'] }}/edit">
+                                                    <form method="post" action="https://gepac-backend.herokuapp.com/news/${newss._id.$oid}/edit">
                                                         <div class="text-center pt-3">
                                                             <p class="display-7 fw-bold">Visualizar/Editar Notícia</p>
                                                         </div>
@@ -375,3 +408,4 @@ function news_data(data) {
 
     }
 }
+

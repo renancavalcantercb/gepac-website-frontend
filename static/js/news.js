@@ -1,5 +1,5 @@
 function get_news_data(){
-    $.getJSON("https://gepac-backend.herokuapp.com//news", function(data) {
+    $.getJSON("https://gepac-backend.herokuapp.com/news", function(data) {
         let news_table = $('#news-table');
         for (let i = 0; i < data.length; i++) {
           let news = data[i];

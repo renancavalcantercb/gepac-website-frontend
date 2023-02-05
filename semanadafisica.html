@@ -222,7 +222,7 @@
             body: data
         };
 
-        fetch('https://gepac-backend.herokuapp.com//register', options)
+        fetch('https://gepac-backend.herokuapp.com/register', options)
             .then(response => {
                 if (response.status !== 200) {
                     return response.json().then(data => {
@@ -242,9 +242,7 @@
             .catch(error => {
                 document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
             });
-
     }
-
     document.getElementById('form').addEventListener('submit', handleFormSubmit);
 </script>
 <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">

@@ -38,7 +38,7 @@ function logout() {
         method: 'POST'
     };
 
-    fetch('https://gepac-backend.herokuapp.com//logout', options)
+    fetch('https://gepac-backend.herokuapp.com/logout', options)
         .then(
             response => response.json(),
             window.location.href = '/'
