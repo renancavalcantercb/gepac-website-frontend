@@ -109,8 +109,7 @@ function students_data(data) {
                                                     data-bs-dismiss="modal">
                                                     Fechar
                                                 </button>
-                                                <form id="subscribed-edit" action="https://gepac-backend.herokuapp.com/subscribed/admin/${student._id.$oid}/edit"
-                                                    method="post">
+                                                <form id="subscribed-edit">
                                                     <input type="submit" value="Editar" class="btn btn-danger">
                                                 </form>
                                             </div>
@@ -142,7 +141,7 @@ function students_data(data) {
 
                                     <!-- Modal footer -->
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-success"
+                                        <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
                                         <form id="subscribed-delete" onsubmit="deleteSubscribed(event, '${student._id.$oid}')">
@@ -181,6 +180,10 @@ function handleFormSubscribed(event, id) {
             const [{category, message}, statusCode] = data;
             if (statusCode === 200) {
                 document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                setTimeout(function () {
+                        location.reload();
+                    }
+                    , 2000);
             }
             const errorMessage = `${message}`;
             document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
@@ -210,6 +213,10 @@ function deleteSubscribed(event, id) {
                 const [{category, message}, statusCode] = data;
                 if (statusCode === 200) {
                     document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                    setTimeout(function () {
+                            location.reload();
+                        }
+                        , 200);
                 }
                 const errorMessage = `${message}`;
                 document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
@@ -220,7 +227,6 @@ function deleteSubscribed(event, id) {
                 document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
             }
         );
-    window.location.reload();
 }
 
 function users_data(data) {
@@ -239,7 +245,7 @@ function users_data(data) {
                 Editar
             </button>
             <!-- The Modal -->
-            <div class="modal" id="edit_${<user className="_id 0oid"></user>}">
+            <div class="modal" id="edit_${user._id.$oid}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <!-- Modal Header -->
