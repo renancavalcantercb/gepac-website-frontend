@@ -145,7 +145,7 @@ function students_data(data) {
                                         <button type="button" class="btn btn-success"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <a href="/user/admin/${student._id.$oid}/delete"
+                                        <a href="https://gepac-backend.herokuapp.com/subscribed/admin/${student._id.$oid}/delete"
                                             class="btn btn-danger">Deletar</a>
                                     </div>
 
@@ -189,32 +189,6 @@ function handleFormSubscribed(event, id) {
         });
 }
 
-function deleteSubscribed(id) {
-    const options = {
-        method: 'DELETE'
-    };
-
-    fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/delete', options)
-        .then(response => {
-            if (response.status !== 200) {
-                return response.json().then(data => {
-                    throw new Error(data);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            const [{category, message}, statusCode] = data;
-            if (statusCode === 200) {
-                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
-            }
-            const errorMessage = `${message}`;
-            document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
-        })
-        .catch(error => {
-            document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
-        });
-}
 
 function users_data(data) {
     let users = data.users;
