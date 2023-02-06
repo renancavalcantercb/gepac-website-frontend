@@ -145,8 +145,9 @@ function students_data(data) {
                                         <button type="button" class="btn btn-success"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <a onsubmit="deleteSubscribed('${student._id.$oid}')" class="btn btn-danger"
-                                            class="btn btn-danger">Deletar</a>
+                                        <form id="subscribed-delete" onsubmit="deleteSubscribed(event, '${student._id.$oid}')">
+                                            <input type="submit" value="Deletar" class="btn btn-danger">
+                                         </form>
                                     </div>
 
                                 </div>
@@ -189,7 +190,7 @@ function handleFormSubscribed(event, id) {
         });
 }
 
-function deleteSubscribed(id) {
+function deleteSubscribed(event, id) {
     const options = {
         method: 'POST'
     };
