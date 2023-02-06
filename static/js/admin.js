@@ -58,6 +58,7 @@ function students_data(data) {
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
+                                    <div id="result"></div>
                                         <form id="edit_${student._id.$oid}" onsubmit="handleFormSubscribed(event,'${student._id.$oid}')">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Name:</label>
@@ -101,7 +102,6 @@ function students_data(data) {
                                                     </option>
                                                 </select>
                                             </div>
-
 
                                             <!-- Modal footer -->
                                             <div class="modal-footer">
@@ -220,6 +220,7 @@ function deleteSubscribed(event, id) {
                 document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
             }
         );
+    window.location.reload();
 }
 
 function users_data(data) {
@@ -238,7 +239,7 @@ function users_data(data) {
                 Editar
             </button>
             <!-- The Modal -->
-            <div class="modal" id="edit_{{user['_id']}}">
+            <div class="modal" id="edit_${<user className="_id 0oid"></user>}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <!-- Modal Header -->
@@ -247,7 +248,6 @@ function users_data(data) {
                             <button type="button" class="btn btn-primary"
                                 data-bs-dismiss="modal">X</button>
                         </div>
-                        <div id="result"></div>
                         <!-- Modal body -->
                         <div class="modal-body">
                             <form action="https://gepac-backend.herokuapp.com/user/admin/${user._id.$oid}/edit" method="post">
