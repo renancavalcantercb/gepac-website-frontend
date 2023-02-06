@@ -231,8 +231,20 @@ function deleteSubscribed(event, id) {
 
 function searchBar(event) {
     event.preventDefault();
+    const api = 'https://gepac-backend.herokuapp.com/user/admin';
 
-    var searchTerm = document.getElementById('search-bar').value;
+    var searchTerm = document.getElementById('search-bar')
+
+    if (searchTerm.value === '') {
+        fetch(api)
+            .then(response => response.json())
+            .then(data => {
+                let table = $('#students-table');
+                table.empty();
+                students_data(data);
+            }
+            )
+    }
 
     const term = searchTerm.value;
     const apiUrl = `https://gepac-backend.herokuapp.com/subscribed/admin/search=${term}`;
@@ -240,7 +252,9 @@ function searchBar(event) {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            let table = $('#students-table');
+            table.empty();
+            students_data(data);
         })
         .catch(error => {
             console.error(error);
