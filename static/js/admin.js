@@ -191,6 +191,7 @@ function handleFormSubscribed(event, id) {
 }
 
 function deleteSubscribed(event, id) {
+    event.preventDefault();
     const options = {
         method: 'POST'
     };
