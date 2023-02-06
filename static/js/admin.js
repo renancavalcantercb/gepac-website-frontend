@@ -235,7 +235,7 @@ function searchBar(event) {
     var searchTerm = document.getElementById('search-bar').value;
 
     const term = searchTerm.value;
-    const apiUrl = `https://gepac-backend.herokuapp.com/subscribed/admin/search?q=${term}`;
+    const apiUrl = `https://gepac-backend.herokuapp.com/subscribed/admin/search=${term}`;
 
     fetch(apiUrl)
         .then(response => response.json())
