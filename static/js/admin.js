@@ -145,7 +145,7 @@ function students_data(data) {
                                         <button type="button" class="btn btn-success"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <a onsubmit="deleteSubscribed(event,'${student._id.$oid}')" class="btn btn-danger"
+                                        <a onsubmit="deleteSubscribed('${student._id.$oid}')" class="btn btn-danger"
                                             class="btn btn-danger">Deletar</a>
                                     </div>
 
@@ -189,9 +189,9 @@ function handleFormSubscribed(event, id) {
         });
 }
 
-function deleteSubscribed(event, id) {
+function deleteSubscribed(id) {
     const options = {
-        method: 'DELETE'
+        method: 'POST'
     };
 
     fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/delete', options)
