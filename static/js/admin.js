@@ -236,14 +236,7 @@ function searchBar(event) {
     var searchTerm = document.getElementById('search-bar')
 
     if (searchTerm.value === '') {
-        fetch(api)
-            .then(response => response.json())
-            .then(data => {
-                let table = $('#students-table');
-                table.empty();
-                students_data(data);
-            }
-            )
+        location.reload();
     }
 
     const term = searchTerm.value;
