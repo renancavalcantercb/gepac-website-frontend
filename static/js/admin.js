@@ -229,6 +229,24 @@ function deleteSubscribed(event, id) {
         );
 }
 
+function searchBar(event) {
+    event.preventDefault();
+
+    var searchTerm = document.getElementById('search-bar').value;
+
+    const term = searchTerm.value;
+    const apiUrl = `https://gepac-backend.herokuapp.com/subscribed/admin/search?q=${term}`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
 function users_data(data) {
     let users = data.users;
     let table = $('#users-table');
