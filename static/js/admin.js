@@ -121,7 +121,7 @@ function students_data(data) {
                         </div>
                         <!-- Button to Open the Modal -->
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#del_${student['_id']}">
+                            data-bs-target="#del_${student._id.$oid}">
                             Deletar
                         </button>
                         <!-- The Modal -->
@@ -137,7 +137,7 @@ function students_data(data) {
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
-                                        Você tem certeza que deseja deletar o usuário {{student['email']}}?
+                                        Você tem certeza que deseja deletar o usuário ${student.email}?
                                     </div>
 
                                     <!-- Modal footer -->
@@ -169,7 +169,33 @@ function handleFormSubscribed(event, id) {
 
     fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/edit', options)
         .then(response => {
-            console.log(response);
+            if (response.status !== 200) {
+                return response.json().then(data => {
+                    throw new Error(data);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const [{category, message}, statusCode] = data;
+            if (statusCode === 200) {
+                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+            }
+            const errorMessage = `${message}`;
+            document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+        })
+        .catch(error => {
+            document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+        });
+}
+
+function deleteSubscribed(id) {
+    const options = {
+        method: 'DELETE'
+    };
+
+    fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/delete', options)
+        .then(response => {
             if (response.status !== 200) {
                 return response.json().then(data => {
                     throw new Error(data);
