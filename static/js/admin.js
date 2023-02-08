@@ -144,7 +144,7 @@ function students_data(data) {
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <form id="subscribed-delete" onsubmit="deleteSubscribed(event, '${student._id.$oid}')">
+                                        <form id="subscribed-delete" onsubmit="deleteReq(event,'subscribed/admin' , '${student._id.$oid}')">
                                             <input type="submit" value="Deletar" class="btn btn-danger">
                                          </form>
                                     </div>
@@ -191,42 +191,6 @@ function handleFormSubscribed(event, id) {
         .catch(error => {
             document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
         });
-}
-
-function deleteSubscribed(event, id) {
-    event.preventDefault();
-    const options = {
-        method: 'POST'
-    };
-
-    fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/delete', options)
-        .then(response => {
-                if (response.status !== 200) {
-                    return response.json().then(data => {
-                        throw new Error(data);
-                    });
-                }
-                return response.json();
-            }
-        )
-        .then(data => {
-                const [{category, message}, statusCode] = data;
-                if (statusCode === 200) {
-                    document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
-                    setTimeout(function () {
-                            location.reload();
-                        }
-                        , 200);
-                }
-                const errorMessage = `${message}`;
-                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
-
-            }
-        )
-        .catch(error => {
-                document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
-            }
-        );
 }
 
 function searchBar(event) {
@@ -337,7 +301,7 @@ function users_data(data) {
                             <button type="button" class="btn btn-success"
                                 data-bs-dismiss="modal">Fechar
                             </button>
-                                <form id="user-delete" onsubmit="deleteUser(event, '${user._id.$oid}')">
+                                <form id="user-delete" onsubmit="deleteReq(event, 'user/admin', '${user._id.$oid}')">
                                     <input type="submit" value="Deletar" class="btn btn-danger">
                                  </form>
                         </div>
@@ -349,78 +313,6 @@ function users_data(data) {
     `);
 
     }
-}
-
-function editUser(event, id) {
-    event.preventDefault();
-
-    const data = new FormData(event.target);
-    const options = {
-        method: 'POST',
-        body: data
-    };
-
-    const apiUrl = `https://gepac-backend.herokuapp.com/user/admin/${id}/edit`;
-
-    fetch(apiUrl, options)
-        .then(response => response.json())
-        .then(data => {
-                const [{category, message}, statusCode] = data;
-                if (statusCode === 200) {
-                    document.getElementById('user-result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
-                    setTimeout(function () {
-                            location.reload();
-                        }
-                        , 200);
-                }
-                const errorMessage = `${message}`;
-                document.getElementById('user-result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
-
-            }
-        )
-        .catch(error => {
-                document.getElementById('user-result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
-            }
-        );
-}
-
-function deleteUser(event, id) {
-    event.preventDefault();
-    const apiUrl = `https://gepac-backend.herokuapp.com/user/admin/${id}/delete`;
-
-    fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-                if (response.status !== 200) {
-                    return response.json().then(data => {
-                        throw new Error(data);
-                    });
-                }
-                return response.json();
-            }
-        )
-        .then(data => {
-                const [{category, message}, statusCode] = data;
-                if (statusCode === 200) {
-                    document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
-                    setTimeout(function () {
-                            location.reload();
-                        }
-                        , 200);
-                }
-                const errorMessage = `${message}`;
-                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
-
-            }
-        )
-        .catch(error => {
-                document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
-            }
-        );
 }
 
 function userForm(event) {
