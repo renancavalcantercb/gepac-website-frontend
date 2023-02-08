@@ -279,7 +279,8 @@ function users_data(data) {
                         </div>
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <form action="https://gepac-backend.herokuapp.com/user/admin/${user._id.$oid}/edit" method="post">
+                            <form>
+                            <div id="user-result"></div>
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1"
                                         class="form-label">Email:</label>
@@ -301,7 +302,7 @@ function users_data(data) {
                                         data-bs-dismiss="modal">
                                         Fechar
                                     </button>
-                                    <form action="https://gepac-backend.herokuapp.com/user/admin/${user._id.$oid}/edit" method="post">
+                                    <form>
                                         <input type="submit" value="Editar" class="btn btn-danger">
                                     </form>
                                 </div>
@@ -348,6 +349,39 @@ function users_data(data) {
     `);
 
     }
+}
+
+function editUser(event, id) {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const options = {
+        method: 'POST',
+        body: data
+    };
+
+    const apiUrl = `https://gepac-backend.herokuapp.com/user/admin/${id}/edit`;
+
+    fetch(apiUrl, options)
+        .then(response => response.json())
+        .then(data => {
+                const [{category, message}, statusCode] = data;
+                if (statusCode === 200) {
+                    document.getElementById('user-result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                    setTimeout(function () {
+                            location.reload();
+                        }
+                        , 200);
+                }
+                const errorMessage = `${message}`;
+                document.getElementById('user-result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+
+            }
+        )
+        .catch(error => {
+                document.getElementById('user-result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+            }
+        );
 }
 
 function deleteUser(event, id) {
@@ -410,7 +444,6 @@ function userForm(event) {
         .then(response => response.json())
         .then(data => {
             const [{category, message}, statusCode] = data;
-            console.log(data)
             if (statusCode === 200) {
                 document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
                 setTimeout(function () {
@@ -438,14 +471,14 @@ function news_data(data) {
                             <td>${newss.author}</td>
                             <td>${newss.resume}</td>
                             <td>
-                                <a href="/news/{{post['slug']}}" target="_blank" class="btn btn-primary">Visualizar</a>
+                                <a href="https://gepac.netlify.app/news-detail?slug=${newss.slug}" target="_blank" class="btn btn-primary">Visualizar</a>
                                 <div>
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#edit_{{post['_id']}}">
+                                        data-bs-target="#edit_${newss['_id']}">
                                         Editar
                                     </button>
                                     <!-- The Modal -->
-                                    <div class="modal" id="edit_{{post['_id']}}">
+                                    <div class="modal" id="edit_${newss['_id']}">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <!-- Modal Header -->
@@ -467,27 +500,27 @@ function news_data(data) {
                                                                     <p class="pb-1 username"></p>
                                                                     <input type="text" class=" name form-control mb-4"
                                                                         placeholder="Title" name="title" required
-                                                                        value="{{post['title']}}">
+                                                                        value="${newss['title']}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-12">
                                                                 <input type="text" class="form-control mb-4"
                                                                     name="resume" placeholder="Resumo"
-                                                                    value="{{post['resume']}}" required>
+                                                                    value="${newss['resume']}" required>
                                                             </div>
                                                             <div class="col-12">
                                                                 <textarea class="form-control mb-4" name="content"
                                                                     rows="5" placeholder="Conteúdo"
-                                                                    required>{{post['content']}}</textarea>
+                                                                    required>${newss['content']}</textarea>
                                                             </div>
                                                             <div class="col-12">
                                                                 <input type="text" class="form-control mb-4"
                                                                     name="img_url" placeholder="Link da Imagem"
-                                                                    value="{{post['img_url']}}" required>
+                                                                    value="${newss['img_url']}" required>
                                                             </div>
                                                             <div class="col-12"><input type="text"
                                                                     class="form-control mb-4" name="author"
-                                                                    placeholder="Author" value="{{post['author']}}"
+                                                                    placeholder="Author" value="${newss['author']}"
                                                                     required>
                                                             </div>
                                                             <div class="col-12"
@@ -507,12 +540,12 @@ function news_data(data) {
                                 </div>
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#del_{{post['_id']}}">
+                                    data-bs-target="#del_${newss['_id']}">
                                     Deletar
                                 </button>
             </div>
             <!-- The Modal -->
-            <div class="modal" id="del_{{post['_id']}}">
+            <div class="modal" id="del_${newss['_id']}">
                 <div class="modal-dialog">
                     <div class="modal-content">
 
@@ -531,7 +564,9 @@ function news_data(data) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar
                             </button>
-                            <a href="/news/{{ post['_id'] }}/delete" class="btn btn-danger">Deletar</a>
+                            <form id="user-delete" onsubmit="deleteReq(event, 'news','${newss['_id']}')">
+                                <input type="submit" value="Deletar" class="btn btn-danger">
+                             </form>
                         </div>
 
                     </div>
@@ -545,3 +580,32 @@ function news_data(data) {
     }
 }
 
+function deleteReq(event, from, id) {
+    event.preventDefault();
+    let apiUrl = `https://gepac-backend.herokuapp.com/${from}/${id}/delete`;
+
+
+    const data = new FormData(event.target);
+    const options = {
+        method: 'POST',
+        body: data
+    };
+
+    fetch(apiUrl, options)
+        .then(response => response.json())
+        .then(data => {
+            const [{category, message}, statusCode] = data;
+            if (statusCode === 200) {
+                document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                setTimeout(function () {
+                        location.reload();
+                    }
+                    , 2000);
+            }
+            const errorMessage = `${message}`;
+            document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+        }).catch(error => {
+            console.log(error);
+        }
+    );
+}
