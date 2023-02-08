@@ -59,7 +59,7 @@ function students_data(data) {
                                     <!-- Modal body -->
                                     <div class="modal-body">
                                     <div id="result"></div>
-                                        <form id="edit_${student._id.$oid}" onsubmit="handleFormSubscribed(event,'${student._id.$oid}')">
+                                        <form id="edit_${student._id.$oid}" onsubmit="editReq(event, 'subscribed/admin','${student._id.$oid}')">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Name:</label>
                                                 <input type="text" class="form-control" id="exampleInputEmail1"
@@ -158,41 +158,6 @@ function students_data(data) {
     }
 };
 
-function handleFormSubscribed(event, id) {
-    event.preventDefault();
-
-    const data = new FormData(event.target);
-    const options = {
-        method: 'POST',
-        body: data
-    };
-
-    fetch('https://gepac-backend.herokuapp.com/subscribed/admin/' + id + '/edit', options)
-        .then(response => {
-            if (response.status !== 200) {
-                return response.json().then(data => {
-                    throw new Error(data);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            const [{category, message}, statusCode] = data;
-            if (statusCode === 200) {
-                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
-                setTimeout(function () {
-                        location.reload();
-                    }
-                    , 2000);
-            }
-            const errorMessage = `${message}`;
-            document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
-        })
-        .catch(error => {
-            document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
-        });
-}
-
 function searchBar(event) {
     event.preventDefault();
     var searchTerm = document.getElementById('search-bar')
@@ -243,7 +208,7 @@ function users_data(data) {
                         </div>
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <form>
+                            <form id="edit-user" onsubmit="editReq(event, 'user/admin', '${user._id.$oid}')">
                             <div id="user-result"></div>
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1"
@@ -266,9 +231,7 @@ function users_data(data) {
                                         data-bs-dismiss="modal">
                                         Fechar
                                     </button>
-                                    <form>
-                                        <input type="submit" value="Editar" class="btn btn-danger">
-                                    </form>
+                                    <input type="submit" value="Salvar" class="btn btn-primary">
                                 </div>
                             </form>
                         </div>
@@ -313,6 +276,44 @@ function users_data(data) {
     `);
 
     }
+}
+
+function editReq(event, from, id) {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const options = {
+        method: 'POST',
+        body: data
+    };
+
+    const apiUrl = `https://gepac-backend.herokuapp.com/${from}/${id}/edit`;
+
+    fetch(apiUrl, options)
+        .then(response => {
+            if (response.status !== 200) {
+                return response.json().then(data => {
+                    throw new Error(data);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const [{category, message}, statusCode] = data;
+            console.log(data);
+            if (statusCode === 200) {
+                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                setTimeout(function () {
+                        location.reload();
+                    }
+                    , 2000);
+            }
+            const errorMessage = `${message}`;
+            document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+        })
+        .catch(error => {
+            document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+        });
 }
 
 function userForm(event) {
