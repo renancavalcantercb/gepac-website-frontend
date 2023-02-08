@@ -50,7 +50,8 @@
                     </button>
                 </a>
                 <form class="d-flex" onsubmit="searchBar(event)">
-                    <input class="form-control me-2" id="search-bar" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control me-2" id="search-bar" type="search" placeholder="Search"
+                           aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
@@ -90,7 +91,8 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="/user/admin/create" method="post">
+                            <form id="user-form" onsubmit="userForm(event)">
+                                <div id="result-users"></div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" name="email">
@@ -116,7 +118,7 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Fechar
                                     </button>
-                                    <input type="submit" value="Save" class="btn btn-primary">
+                                    <input type="submit" value="Criar" class="btn btn-primary">
                                 </div>
                             </form>
                         </div>

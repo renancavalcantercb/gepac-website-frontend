@@ -231,8 +231,6 @@ function deleteSubscribed(event, id) {
 
 function searchBar(event) {
     event.preventDefault();
-    const api = 'https://gepac-backend.herokuapp.com/user/admin';
-
     var searchTerm = document.getElementById('search-bar')
 
     if (searchTerm.value === '') {
@@ -266,7 +264,7 @@ function users_data(data) {
 <td>${user.admin}</td>
         <td>
             <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                data-bs-target="#edit_{{user['_id']}}">
+                data-bs-target="#edit_${user._id.$oid}">
                 Editar
             </button>
             <!-- The Modal -->
@@ -287,12 +285,11 @@ function users_data(data) {
                                         class="form-label">Email:</label>
                                     <input type="email" class="form-control" id="exampleInputEmail1"
                                         aria-describedby="emailHelp" name="email"
-                                        value="{{user['email']}}">
+                                        value="${user['email']}">
                                 </div>
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" name="admin" class="form-check-input"
-                                        id="exampleCheck1" {%if user['admin']=='Admin'
-                                        %}checked{%endif%}>
+                                        id="exampleCheck1" ${user['admin'] === 'Admin' ? 'checked' : ''}>
                                     <label class="form-check-label"
                                         for="exampleCheck1">Admin</label>
                                 </div>
@@ -315,11 +312,11 @@ function users_data(data) {
             </div>
             <!-- Button to Open the Modal -->
             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                data-bs-target="#del_{{user['_id']}}">
+                data-bs-target="#del_${user._id.$oid}">
                 Deletar
             </button>
             <!-- The Modal -->
-            <div class="modal" id="del_{{user['_id']}}">
+            <div class="modal" id="del_${user._id.$oid}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <!-- Modal Header -->
@@ -331,7 +328,7 @@ function users_data(data) {
 
                         <!-- Modal body -->
                         <div class="modal-body">
-                            Você tem certeza que deseja deletar o usuário {{user['email']}}?
+                            Você tem certeza que deseja deletar o usuário ${user['email']}?
                         </div>
 
                         <!-- Modal footer -->
@@ -339,10 +336,10 @@ function users_data(data) {
                             <button type="button" class="btn btn-success"
                                 data-bs-dismiss="modal">Fechar
                             </button>
-                            <a href="/user/admin/{{ user['_id'] }}/delete"
-                                class="btn btn-danger">Deletar</a>
+                                <form id="user-delete" onsubmit="deleteUser(event, '${user._id.$oid}')">
+                                    <input type="submit" value="Deletar" class="btn btn-danger">
+                                 </form>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -351,6 +348,82 @@ function users_data(data) {
     `);
 
     }
+}
+
+function deleteUser(event, id) {
+    event.preventDefault();
+    const apiUrl = `https://gepac-backend.herokuapp.com/user/admin/${id}/delete`;
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+                if (response.status !== 200) {
+                    return response.json().then(data => {
+                        throw new Error(data);
+                    });
+                }
+                return response.json();
+            }
+        )
+        .then(data => {
+                const [{category, message}, statusCode] = data;
+                if (statusCode === 200) {
+                    document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                    setTimeout(function () {
+                            location.reload();
+                        }
+                        , 200);
+                }
+                const errorMessage = `${message}`;
+                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+
+            }
+        )
+        .catch(error => {
+                document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+            }
+        );
+}
+
+function userForm(event) {
+    document.getElementById('result-users').innerHTML = '';
+    event.preventDefault()
+
+    // check if password and confirm password are the same
+    form = document.getElementById('user-form');
+    if (form.password.value !== form.confirm_password.value) {
+        return document.getElementById('result-users').innerHTML = `<div class="alert alert-danger col-12">As senhas não são iguais</div>`;
+    }
+
+    const apiUrl = 'https://gepac-backend.herokuapp.com/user/admin/create';
+    const data = new FormData(event.target);
+    const options = {
+        method: 'POST',
+        body: data
+    };
+
+    fetch(apiUrl, options)
+        .then(response => response.json())
+        .then(data => {
+            const [{category, message}, statusCode] = data;
+            console.log(data)
+            if (statusCode === 200) {
+                document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                setTimeout(function () {
+                        location.reload();
+                    }
+                    , 2000);
+            }
+            const errorMessage = `${message}`;
+            document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+        }).catch(error => {
+            console.log(error);
+        }
+    );
 }
 
 function news_data(data) {
