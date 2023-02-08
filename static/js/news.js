@@ -9,7 +9,7 @@ function get_news_data(){
         <div class="col-md-4">
             <div class="position-relative snipimage">
                 <a
-                        href="news-detail.html?slug=${news.slug}"
+                        href="news-detail?slug=${news.slug}"
                         target="_blank">
                     <img src=${news.img_url} class="rounded img-fluid w-100 img-responsive"></a>
             </div>
