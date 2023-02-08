@@ -1,6 +1,9 @@
 function newsDetail() {
     let urlParams = new URLSearchParams(window.location.search);
     let slug = urlParams.get("slug");
+    if(slug === null || slug === undefined) {
+        window.location.href = "/404";
+    }
     $.ajax({
         type: "GET",
         url: "https://gepac-backend.herokuapp.com/news/" + slug,
