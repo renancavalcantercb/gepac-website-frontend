@@ -58,8 +58,8 @@ function students_data(data) {
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
-                                    <div id="result"></div>
-                                        <form id="edit_${student._id.$oid}" onsubmit="editReq(event, 'subscribed/admin','${student._id.$oid}')">
+                                        <form id="edit_${student._id.$oid}" onsubmit="editReq(event, 'subscribed/admin','${student._id.$oid}', 'student')">
+                                        <div id="student_result"></div>
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Name:</label>
                                                 <input type="text" class="form-control" id="exampleInputEmail1"
@@ -208,8 +208,8 @@ function users_data(data) {
                         </div>
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <form id="edit-user" onsubmit="editReq(event, 'user/admin', '${user._id.$oid}')">
-                            <div id="user-result"></div>
+                            <form id="edit-user" onsubmit="editReq(event, 'user/admin', '${user._id.$oid}', 'user')">
+                            <div id="user_result"></div>
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1"
                                         class="form-label">Email:</label>
@@ -278,7 +278,7 @@ function users_data(data) {
     }
 }
 
-function editReq(event, from, id) {
+function editReq(event, from, id, result) {
     event.preventDefault();
 
     const data = new FormData(event.target);
@@ -288,7 +288,7 @@ function editReq(event, from, id) {
     };
 
     const apiUrl = `https://gepac-backend.herokuapp.com/${from}/${id}/edit`;
-
+    result = `${result}_result`;
     fetch(apiUrl, options)
         .then(response => {
             if (response.status !== 200) {
@@ -300,56 +300,56 @@ function editReq(event, from, id) {
         })
         .then(data => {
             const [{category, message}, statusCode] = data;
-            console.log(data);
             if (statusCode === 200) {
-                document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                document.getElementById(result).innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
                 setTimeout(function () {
                         location.reload();
                     }
                     , 2000);
             }
             const errorMessage = `${message}`;
-            document.getElementById('result').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+            document.getElementById(result).innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
         })
         .catch(error => {
-            document.getElementById('result').innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+            document.getElementById(result).innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
         });
 }
 
-function userForm(event) {
-    document.getElementById('result-users').innerHTML = '';
-    event.preventDefault()
+function createReq(event, from, result) {
+    event.preventDefault();
 
-    // check if password and confirm password are the same
-    form = document.getElementById('user-form');
-    if (form.password.value !== form.confirm_password.value) {
-        return document.getElementById('result-users').innerHTML = `<div class="alert alert-danger col-12">As senhas não são iguais</div>`;
-    }
-
-    const apiUrl = 'https://gepac-backend.herokuapp.com/user/admin/create';
     const data = new FormData(event.target);
     const options = {
         method: 'POST',
         body: data
     };
 
+    const apiUrl = `https://gepac-backend.herokuapp.com/${from}/create`;
+    result = `${result}_result`;
     fetch(apiUrl, options)
-        .then(response => response.json())
+        .then(response => {
+            if (response.status !== 200) {
+                return response.json().then(data => {
+                    throw new Error(data);
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             const [{category, message}, statusCode] = data;
             if (statusCode === 200) {
-                document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                document.getElementById(result).innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
                 setTimeout(function () {
                         location.reload();
                     }
                     , 2000);
             }
             const errorMessage = `${message}`;
-            document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
-        }).catch(error => {
-            console.log(error);
-        }
-    );
+            document.getElementById(result).innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+        })
+        .catch(error => {
+            document.getElementById(result).innerHTML = `<div class="alert alert-danger col-12">${error}</div>`;
+        });
 }
 
 function news_data(data) {
@@ -383,7 +383,8 @@ function news_data(data) {
                                                 </div>
                                                 <!-- Modal body -->
                                                 <div class="modal-body">
-                                                    <form method="post" action="https://gepac-backend.herokuapp.com/news/${newss._id.$oid}/edit">
+                                                    <form onsubmit="editReq(event, 'news', '${newss['_id']}', 'news')">
+                                                    <div id="news_result"></div>
                                                         <div class="text-center pt-3">
                                                             <p class="display-7 fw-bold">Visualizar/Editar Notícia</p>
                                                         </div>
@@ -421,8 +422,7 @@ function news_data(data) {
                                                             </div>
                                                         </div>
                                                         <div class="text-center">
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Editar</button>
+                                                            <input type="submit" value="Salvar" class="btn btn-primary">
                                                         </div>
                                                     </form>
                                                 </div>
@@ -457,7 +457,7 @@ function news_data(data) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar
                             </button>
-                            <form id="user-delete" onsubmit="deleteReq(event, 'news','${newss['_id']}')">
+                            <form onsubmit="deleteReq(event, 'news','${newss['_id']}')">
                                 <input type="submit" value="Deletar" class="btn btn-danger">
                              </form>
                         </div>
@@ -473,7 +473,7 @@ function news_data(data) {
     }
 }
 
-function deleteReq(event, from, id) {
+function deleteReq(event, from, id, result) {
     event.preventDefault();
     let apiUrl = `https://gepac-backend.herokuapp.com/${from}/${id}/delete`;
 
@@ -483,20 +483,20 @@ function deleteReq(event, from, id) {
         method: 'POST',
         body: data
     };
-
+    result = `${result}_result`;
     fetch(apiUrl, options)
         .then(response => response.json())
         .then(data => {
             const [{category, message}, statusCode] = data;
             if (statusCode === 200) {
-                document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
+                document.getElementById(result).innerHTML = `<div class="alert alert-${category} col-12">${message}</div>`;
                 setTimeout(function () {
                         location.reload();
                     }
                     , 2000);
             }
             const errorMessage = `${message}`;
-            document.getElementById('result-users').innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
+            document.getElementById(result).innerHTML = `<div class="alert alert-${category} col-12">${errorMessage}</div>`;
         }).catch(error => {
             console.log(error);
         }

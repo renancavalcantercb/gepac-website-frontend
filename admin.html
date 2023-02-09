@@ -86,13 +86,13 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Criar um novo usuário</h5>
+                            <h5 class="modal-title">Criar um novo usuário</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="user-form" onsubmit="userForm(event)">
-                                <div id="result-users"></div>
+                            <form id="user-form" onsubmit="createReq(event, 'user/admin', 'users')">
+                                <div id="users_result"></div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" name="email">
@@ -162,7 +162,8 @@
                         <div class="modal-body">
                             <div class="loginform">
                                 <div id='add-post' class="container pt-4 pb-5">
-                                    <form method="post" action="{{ url_for('add_news') }}">
+                                    <form onsubmit="createReq(event, 'news', 'posts')">
+                                        <div id="posts_result"></div>
                                         <div class="text-center pt-3">
                                             <p class="display-7 fw-bold">Adicionar Notícia</p><span><small
                                                 class="textinho">Insira o conteúdo da notícia</small></span>
