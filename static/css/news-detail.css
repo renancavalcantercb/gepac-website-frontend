@@ -6,17 +6,6 @@ body {
     background-image: url(../assets/bg.jpg);
 }
 
-article {
-    font-size: 2vw;
-}
-
-@media only screen and (max-width: 600px) {
-    article > p {
-        font-size: 2vw;
-    }
-}
-
-
 p, h1, h2, h3, h4, h5, h6, li, span, div, input, textarea, select, button {
     color: #fff;
 }
