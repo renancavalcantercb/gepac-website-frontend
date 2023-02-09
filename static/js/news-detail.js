@@ -10,7 +10,6 @@ function newsDetail() {
         dataType: "json",
         success: function (data) {
             let news = data;
-            console.log(news)
             let news_table = $('#news-table');
             news_table.append(`
                 <h1>${news.title}</h1> 
