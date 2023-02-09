@@ -10,15 +10,9 @@ article {
     font-size: 2vw;
 }
 
-@media only screen and (max-width: 50vw) {
+@media only screen and (max-width: 600px) {
     article {
-        font-size: 1.5vw;
-    }
-}
-
-@media only screen and (max-height: 35vh) {
-    article {
-        font-size: 1vw;
+        font-size: 2vw;
     }
 }
 
