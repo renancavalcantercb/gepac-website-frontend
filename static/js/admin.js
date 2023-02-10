@@ -31,7 +31,7 @@ function get_data() {
 
 function students_data(data) {
     let students = data.students;
-    let table = $('#students-table');
+    let table = $('#students_table');
     for (let i in students) {
         let student = students[i];
         table.append(`
@@ -158,32 +158,42 @@ function students_data(data) {
     }
 };
 
-function searchBar(event) {
+function searchBar(event, url, type, result_table) {
     event.preventDefault();
-    var searchTerm = document.getElementById('search-bar')
+
+    type = `${type}_search_bar`;
+    var searchTerm = document.getElementById(type)
 
     if (searchTerm.value === '') {
         location.reload();
     }
 
+    searchData = result_table.split('_')[0];
     const term = searchTerm.value;
-    const apiUrl = `https://gepac-backend.herokuapp.com/subscribed/admin/search=${term}`;
+    const apiUrl = `https://gepac-backend.herokuapp.com/${url}/search=${term}`;
+    result_table = `#${result_table}`;
 
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            let table = $('#students-table');
+            let table = $(result_table);
             table.empty();
-            students_data(data);
+            if (searchData === 'students') {
+                students_data(data);
+            } else if (searchData === 'users') {
+                users_data(data);
+            } else if (searchData === 'news') {
+                news_data(data);
+            }
         })
         .catch(error => {
-            console.error(error);
+            alert('Erro ao buscar dados');
         });
 }
 
 function users_data(data) {
     let users = data.users;
-    let table = $('#users-table');
+    let table = $('#users_table');
     for (let i in users) {
         let user = users[i];
         table.append(`
@@ -354,7 +364,7 @@ function createReq(event, from, result) {
 
 function news_data(data) {
     let news = data.posts;
-    let table = $('#news-table');
+    let table = $('#news_table');
     for (let i in news) {
         let newss = news[i];
         table.append(`
