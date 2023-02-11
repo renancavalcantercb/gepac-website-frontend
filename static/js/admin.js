@@ -144,7 +144,7 @@ function students_data(data) {
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <form id="subscribed-delete" onsubmit="deleteReq(event,'subscribed/admin' , '${student._id.$oid}')">
+                                        <form id="subscribed-delete" onsubmit="deleteReq(event,'subscribed/admin', '${student._id.$oid}', 'student')">
                                             <input type="submit" value="Deletar" class="btn btn-danger">
                                          </form>
                                     </div>
@@ -274,7 +274,7 @@ function users_data(data) {
                             <button type="button" class="btn btn-success"
                                 data-bs-dismiss="modal">Fechar
                             </button>
-                                <form id="user-delete" onsubmit="deleteReq(event, 'user/admin', '${user._id.$oid}')">
+                                <form id="user-delete" onsubmit="deleteReq(event, 'user/admin', '${user._id.$oid}', 'user')">
                                     <input type="submit" value="Deletar" class="btn btn-danger">
                                  </form>
                         </div>
@@ -284,7 +284,6 @@ function users_data(data) {
         </td>
     </tr>
     `);
-
     }
 }
 
@@ -467,15 +466,13 @@ function news_data(data) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar
                             </button>
-                            <form onsubmit="deleteReq(event, 'news','${newss['_id']}')">
+                            <form onsubmit="deleteReq(event, 'news','${newss['_id']}', 'news')">
                                 <input type="submit" value="Deletar" class="btn btn-danger">
                              </form>
                         </div>
-
                     </div>
                 </div>
             </div>
-
             </td>
             </tr>
     `);
