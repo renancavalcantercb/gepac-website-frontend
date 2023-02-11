@@ -5,7 +5,7 @@ function parseJWT(token) {
 }
 
 function getStudentData() {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem('token');
     const student = parseJWT(jwt);
     $.getJSON('https://gepac.netlify.app/subscribed/admin/' + student.id + '/view', function (data) {
         console.log(data);
