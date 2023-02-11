@@ -16,7 +16,7 @@ if (jwt == null){
 
 else {
     const user = parseJWT(jwt);
-    admin_page = (user.admin == true) ? '<li><a class="dropdown-item" href="/admin">Admin</a></li>' : '';
+    admin_page = (user.admin === true) ? '<li><a class="dropdown-item" href="/admin">Admin</a></li>' : '';
     $('.navbar-nav.ms-auto').append(`
             <li class="nav-item dropdown">
                 <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -24,6 +24,7 @@ else {
                    ${user.name}
                 </a>    
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="profile">Perfil</a></li>
                 ${admin_page}
                 <li><a class="dropdown-item" onClick=logout()>Logout</a></li>
                 </ul>
