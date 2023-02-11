@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/profile.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../static/js/profile.js"></script>
 </head>
 
 <body>
@@ -52,40 +53,56 @@
         </div>
     </div>
 </nav>
-<div class="container-md rounded bg-dark mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Informações Pessoais</h4>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Nome:</label>
-                        <input type="text" class="form-control">
+<script>
+    getStudentData()
+</script>
+<div class="loginform">
+    <div id='login' class="container pt-4 pb-5">
+        <form id="form">
+            <div id="result"></div>
+            <div class="text-center pb-3">
+                <p class="display-7 fw-bold">Perfil</p>
+                <p class="lead">Visualize e edite a suas informações</p>
+            </div>
+            <div class="row px-md-4 px-1 m-0">
+                <div class="col-12">
+                    <div>
+                        <input type="email" class=" name form-control mb-4"
+                               placeholder="Nome completo"
+                               name="name" value="">
                     </div>
-                    <div class="col-md-12"><label class="labels">Email:</label><input type="email" class="form-control">
-                    </div>
-                    <div class="col-md-12"><label class="labels">Telefone:</label><input type="tel"
-                                                                                         class="form-control"
-                    ></div>
-                    <div class="col-md-12"><label class="labels">Data de nascimento:</label><input type="text"
-                                                                                                   class="form-control"
-                    ></div>
-                    <div class="col-md-12"><label class="labels">CPF:</label><input type="text"
-                                                                                    class="form-control"
-                                                                                    value="123.456.789-01" disabled></div>
-                    <div class="col-md-12"><label class="labels">Curso:</label><input type="text"
-                                                                                      class="form-control"
-                    ></div>
                 </div>
-                <div class="mt-5 text-center">
-                    <a href="index" class="btn btn-secondary profile-button" role="button">Voltar</a>
-                    <a class="btn btn-primary profile-button" role="button">Salvar</a>
+                <div class="col-12">
+                    <input type="email" class="form-control mb-4" name="email" id="email"
+                           placeholder="Email">
+                </div>
+                <div class="col-12">
+                    <input type="tel" class="form-control mb-4" name="phone" id="telephone"
+                           placeholder="Telefone">
+                </div>
+                <div class="col-12">
+                    <input type="tel" class="form-control mb-4" name="birthdate" id="birthdate"
+                           placeholder="Data de Nascimento">
+                </div>
+                <div class="col-12">
+                    <input type="text" class="form-control mb-4" name="cpf" id="cpf"
+                           placeholder="CPF" value="123.456.789-01">
+                </div>
+                <div class="col-12">
+                    <input type="tel" class="form-control mb-4" name="course" id="course"
+                           placeholder="Minicurso">
+                </div>
+                <div class="col-12 d-flex justify-content-center">
+                    <a href="index" class="btn btn-primary btn-custom"
+                       style="background-color:#262626; border-color: white; margin-right: 1%">Voltar</a>
+                    <input type="submit" value="Login" class="btn btn-primary btn-custom"
+                           style="background-color:#262626; border-color: white; margin-left: 1%;">
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 <script src="static/js/navbar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>disabledCPFandCourse()</script>
 </body>
