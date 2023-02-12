@@ -39,9 +39,20 @@ function updateStudentInfo(student) {
     document.getElementById('phone').value = student.phone;
     document.getElementById('birthdate').value = student.birthdate;
     document.getElementById('cpf').value = student.cpf;
-    document.getElementById('course').value = student.course;
+    document.getElementById('course').value = getCourseValue(student.course);
 }
 
+function getCourseValue(course) {
+    if (course === 1) {
+        return "Selenografia - Prof. Heliomarzio"
+    } else if (course === 2) {
+        return "Física Estatística - Prof. Mairton"
+    } else if (course === 3) {
+        return "Python para Física - Prof. Renan Cavalcante"
+    } else {
+        return "Nenhum curso selecionado"
+    }
+}
 
 function disabledCPFandCourse() {
     var cpf = document.getElementById("cpf");
