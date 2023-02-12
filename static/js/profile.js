@@ -37,7 +37,7 @@ function updateStudentInfo(student) {
     document.getElementById('name').value = student.name;
     document.getElementById('email').value = student.email;
     document.getElementById('phone').value = student.phone;
-    document.getElementById('birthdate').value = student.birthdate;
+    document.getElementById('birthdate').value = formatBirthdate(student.birthdate);
     document.getElementById('cpf').value = student.cpf;
     document.getElementById('course').value = getCourseValue(student.course);
 }
@@ -52,6 +52,11 @@ function getCourseValue(course) {
     } else {
         return "Nenhum curso selecionado"
     }
+}
+
+function formatBirthdate(date) {
+    const dateArray = date.split('-');
+    return `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
 }
 
 function disabledCPFandCourse() {
