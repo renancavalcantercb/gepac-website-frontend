@@ -25,7 +25,7 @@ if (jwt == null) {
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="profile">Perfil</a></li>
                 ${admin_page}
-                <li><a class="dropdown-item" onClick=logout()>Logout</a></li>
+                <li><a class="dropdown-item" onClick=logout() style="cursor:pointer;">Logout</a></li>
                 </ul>
             </li>
     `);
