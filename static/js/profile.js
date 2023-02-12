@@ -4,12 +4,42 @@ function parseJWT(token) {
     return JSON.parse(window.atob(base64));
 }
 
+const API_URL = 'https://gepac-backend.herokuapp.com';
+
 function getStudentData() {
-    const jwt = localStorage.getItem('token');
-    const student = parseJWT(jwt);
-    $.getJSON('https://gepac-backend.herokuapp.com/subscribed/admin/' + student.id + '/view', function (data) {
-        console.log(data);
-    });
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.error('Token not found');
+        return;
+    }
+
+    const studentId = parseJWT(token).id;
+    fetch(`${API_URL}/subscribed/admin/${studentId}/view`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateStudentInfo(data);
+        })
+        .catch(error => {
+            console.error('There was a problem fetching the data:', error);
+        });
+}
+
+function updateStudentInfo(student) {
+    document.getElementById('name').value = student.name;
+    document.getElementById('email').value = student.email;
+    document.getElementById('phone').value = student.phone;
+    document.getElementById('birthdate').value = student.birthdate;
+    document.getElementById('cpf').value = student.cpf;
+    document.getElementById('course').value = student.course;
 }
 
 
