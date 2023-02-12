@@ -68,8 +68,8 @@ function like() {
             const token = localStorage.getItem('token');
             const studentId = parseJWT(token).id;
             console.log(newsId, studentId);
-            $.post(`https://gepac-backend.herokuapp.com/news/${newsId}/like`, function (data) {
-            // $.post(`http://localhost:5000/news/${newsId}/like`, {studentId: studentId}, function (data) {
+            $.post(`https://gepac-backend.herokuapp.com/news/${newsId}/like`, {studentId: studentId}, function (data) {
+                // $.post(`http://localhost:5000/news/${newsId}/like`, {studentId: studentId}, function (data) {
                 console.log(data);
             });
         } else {
