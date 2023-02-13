@@ -31,18 +31,19 @@ function get_news_data() {
                   <span class="days-ago">${news.date_posted}</span>
                </div>
                <div class="ms-auto">
-                  <span><i class="bi-heart" data-news-id="${news._id}" onclick="like()"></i> ${news.likes}</span>
-                  <span><i class="bi-eye-fill"></i> ${news.views}</span>
+                  <span><i class="bi-heart" data-news-id="${news._id}"></i> ${news.likes}</span>
+                  <span><i class="bi-eye-fill" id="views-count" data-news-id="${news._id}"></i> ${news.views}</span>
                </div>
             </div>
          </div>
       </div>
    </div>
 </div>
-        `)
-
+            `);
         }
-    })
+        like();
+        view();
+    });
 }
 
 function parseJWT(token) {
@@ -61,19 +62,36 @@ function isLogged() {
 }
 
 function like() {
-    $(".bi-heart").click(function () {
-        if (isLogged()) {
-            $(this).toggleClass("bi-heart bi-heart-fill");
-            const newsId = $(this).data("news-id");
-            const token = localStorage.getItem('token');
-            const studentId = parseJWT(token).id;
-            console.log(newsId, studentId);
-            $.post(`https://gepac-backend.herokuapp.com/news/${newsId}/like`, {student_id: studentId}, function (data) {
-                // $.post(`http://localhost:5000/news/${newsId}/like`, {studentId: studentId}, function (data) {
-                console.log(data);
-            });
-        } else {
-            alert("Você precisa estar logado para curtir esta notícia.");
-        }
+    let heart_icons = document.querySelectorAll('.bi-heart');
+    heart_icons.forEach((heart_icon) => {
+        let like_count = heart_icon.nextSibling.textContent.trim();
+        heart_icon.addEventListener('click', function () {
+            if (isLogged()) {
+                const newsId = $(this).data("news-id");
+                const token = localStorage.getItem('token');
+                const studentId = parseJWT(token).id;
+                $.post(`https://gepac-backend.herokuapp.com/news/${newsId}/like`, {student_id: studentId}, function (data) {
+                    like_count++;
+                    heart_icon.nextSibling.textContent = like_count;
+                });
+                $(this).toggleClass("bi-heart bi-heart-fill");
+            } else {
+                alert("Você precisa estar logado para curtir esta notícia.");
+            }
+        });
     });
+}
+
+
+function view() {
+    let newsLinks = document.querySelectorAll('.snipimage a');
+    newsLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const newsId = $(this).parents('.card').find('#views-count').data('news-id');
+            $.post(`https://gepac-backend.herokuapp.com/news/${newsId}/views`, function (data) {
+                window.open(link.href, '_blank');
+            });
+        });
+    })
 }
