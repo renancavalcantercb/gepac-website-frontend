@@ -87,10 +87,8 @@ function view() {
     let newsLinks = document.querySelectorAll('.snipimage a');
     newsLinks.forEach(function (link) {
         link.addEventListener('click', function (event) {
-            event.preventDefault();
             const newsId = $(this).parents('.card').find('#views-count').data('news-id');
             $.post(`https://gepac-backend.herokuapp.com/news/${newsId}/views`, function (data) {
-                window.open(link.href, '_blank');
             });
         });
     })
